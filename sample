@@ -1,0 +1,25 @@
+ubuntu@ip-172-31-19-163:~/maven_web$ sudo usermod -aG docker ubuntu
+ubuntu@ip-172-31-19-163:~/maven_web$ newgrp docker
+ubuntu@ip-172-31-19-163:~/maven_web$ docker ps
+
+docker build -t aws_image .
+docker images
+
+ubuntu@ip-172-31-19-163:~/maven_web$ docker stop app-demo
+app-demo
+ubuntu@ip-172-31-19-163:~/maven_web$ docker rm app-demo
+app-demo
+ubuntu@ip-172-31-19-163:~/maven_web$ docker run -d --name app-demo -p 6060:8080 aws_image
+
+ curl http://localhost:6060
+docker exec -it app-demo ls /usr/local/tomcat/webapps
+webapp  webapp.war
+http://54.173.69.205:6060/webapp/
+
+dockerfile of webapp
+from tomcat:9-jdk11
+copy target/*.war /usr/share/tomcat/webapps
+
+index.html file
+from nginx:alpine
+copy . /usr/share/nginx/html
