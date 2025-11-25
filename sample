@@ -23,3 +23,34 @@ copy target/*.war /usr/share/tomcat/webapps
 index.html file
 from nginx:alpine
 copy . /usr/share/nginx/html
+
+
+pipeline {
+    agent any
+    tools {
+        maven 'MAVEN-HOME'
+    }
+    stages {
+        stage('git repo & clean') {
+            steps {
+                bat "git clone https://github.com/InjapuriShruthi/524_maven_java.git"
+                bat "mvn clean -f 524_maven_java"
+            }
+        }
+        stage('install') {
+            steps {
+                bat "mvn install -f 524_maven_java"
+            }
+        }
+        stage('test') {
+            steps {
+                bat "mvn test -f 524_maven_java"
+            }
+        }
+        stage('package') {
+            steps {
+                bat "mvn package -f 524_maven_java"
+            }
+        }
+    }
+}
